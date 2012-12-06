@@ -24,7 +24,6 @@ our $VERSION = '0.01';
  Script options:
  -v|--verbose       Verbose script execution
  -h|--help          Shows this help text
- -c|--config        Configuration file to use for script options
 
  Other script options:
  -f|--file          Path to factoid file; may be used multiple times
@@ -35,33 +34,30 @@ our $VERSION = '0.01';
 
  Example usage:
 
- # Generate a config file to modify that contains the script defaults
- factoid_tool.pl --verbose
-
- # Use a configuration file for script options
- factoid_tool.pl --config /path/to/config/file.cfg
+ # list factoids in /path/to/factoid-is.[dir|pag]
+ factoid_tool.pl --file /path/to/factoid-is --list
 
 You can view the full C<POD> documentation of this file by calling C<perldoc
 factoid_tool.pl>.
 
 =head1 DESCRIPTION
 
-B<factoid_tool.pl> is a template file to be used for writing scripts.
+B<factoid_tool.pl> - Browse, maintain and dump C<Infobot> factoid files.
 
 =head1 OBJECTS
 
-=head2 Template::Config
+=head2 FactoidTool::Config
 
 An object used for storing configuration data.
 
 =head3 Object Methods
 
-=cut 
+=cut
 
 ######################
-# Template::Config #
+# FactoidTool::Config #
 ######################
-package Template::Config;
+package FactoidTool::Config;
 use strict;
 use warnings;
 use Getopt::Long;
@@ -72,26 +68,22 @@ use POSIX qw(strftime);
 
 =item new( )
 
-Creates the L<Template::Config> object, and parses out options using
+Creates the L<FactoidTool::Config> object, and parses out options using
 L<Getopt::Long>.
 
 =cut
 
 # a list of valid arguments to this script
 my @_valid_script_args = ( qw(verbose config) );
-); # my @_valid_script_args 
-
-# a list of arguments that won't cause the script to barf if Shout is not
-# installed
 
 sub new {
     my $class = shift;
 
     my $self = bless ({}, $class);
 
-    # script arguments 
-    my %args; 
-    
+    # script arguments
+    my %args;
+
     # parse the command line arguments (if any)
     my $parser = Getopt::Long::Parser->new();
 
@@ -101,10 +93,12 @@ sub new {
         # script options
         q(verbose|v+),
         q(help|h),
-        q(config|c=s),
         # other options
-        q(password|a=s),
-        q(user|u=s),
+        q(file|f=s@),
+        q(dump|d),
+        q(list|l),
+        q(keys|k),
+        q(values|s),
     ); # $parser->getoptions
 
     # assign the args hash to this object so it can be reused later on
@@ -144,11 +138,8 @@ sub new {
         # now print out the sample config file
         print qq(# sample template config file\n);
         print qq(# any line that starts with '#' is a comment\n);
-        print qq(# sample config generated on ) 
+        print qq(# sample config generated on )
             . POSIX::strftime( q(%c), localtime() ) . qq(\n);
-        foreach my $arg ( @_valid_shout_args ) {
-            print $arg . q( = ) . $self->get($arg) . qq(\n);
-        } # foreach my $arg ( @_valid_shout_args )
         # cheat a bit and add these last config settings
         # here document syntax
         print <<EOC;
@@ -167,11 +158,11 @@ EOC
         my $config_errors = 0;
         foreach my $line ( @config_lines ) {
             chomp $line;
-            warn qq(VERB: parsing line '$line'\n) 
+            warn qq(VERB: parsing line '$line'\n)
                 if ( defined $self->get(q(verbose)));
             next if ( $line =~ /^#/ );
             my ($key, $value) = split(/\s*=\s*/, $line);
-            warn qq(VERB: key/value for line is '$key'/'$value'\n) 
+            warn qq(VERB: key/value for line is '$key'/'$value'\n)
                 if ( defined $self->get(q(verbose)));
             if ( grep(/$key/, @_valid_script_args) > 0 ) {
                 $self->set($key => $value);
@@ -213,14 +204,14 @@ sub _apply_defaults {
     my $self = shift;
     # icecast defaults
     $self->set( user => q(source) ) unless ( defined $self->get(q(user)) );
-    $self->set( password => q(default) ) unless ( 
+    $self->set( password => q(default) ) unless (
         defined $self->get(q(password)) );
 } # sub _apply_defaults
 
 =item get($key)
 
 Returns the scalar value of the key passed in as C<key>, or C<undef> if the
-key does not exist in the L<Template::Config> object.
+key does not exist in the L<FactoidTool::Config> object.
 
 =cut
 
@@ -236,9 +227,9 @@ sub get {
 
 =item set( key => $value )
 
-Sets in the L<Template::Config> object the key/value pair passed in as
+Sets in the L<FactoidTool::Config> object the key/value pair passed in as
 arguments.  Returns the old value if the key already existed in the
-L<Template::Config> object, or C<undef> otherwise.
+L<FactoidTool::Config> object, or C<undef> otherwise.
 
 =cut
 
@@ -249,7 +240,7 @@ sub set {
     # turn the args reference back into a hash with a copy
     my %args = %{$self->{_args}};
 
-    if ( exists $args{$key} ) { 
+    if ( exists $args{$key} ) {
         my $oldvalue = $args{$key};
         $args{$key} = $value;
         $self->{_args} = \%args;
@@ -275,7 +266,7 @@ sub get_args {
 
 =back
 
-=head2 Template::Logger
+=head2 FactoidTool::Logger
 
 A simple logger module, for logging script output and errors.
 
@@ -284,21 +275,21 @@ A simple logger module, for logging script output and errors.
 =cut
 
 ######################
-# Template::Logger #
+# FactoidTool::Logger #
 ######################
-package Template::Logger;
+package FactoidTool::Logger;
 use strict;
 use warnings;
 use POSIX qw(strftime);
 use IO::File;
 use IO::Handle;
 
-=over 
+=over
 
 =item new($config)
 
-Creates the L<Template::Logger> object, and sets up various filehandles
-needed to log to files or C<STDOUT>.  Requires a L<Template::Config> object
+Creates the L<FactoidTool::Logger> object, and sets up various filehandles
+needed to log to files or C<STDOUT>.  Requires a L<FactoidTool::Config> object
 as the argument, so that options having to deal with logging can be
 parsed/acted upon.  Returns the logger object to the caller.
 
@@ -314,13 +305,13 @@ sub new {
         $logfd = IO::File->new(q( >> ) . $config->get(q(logfile)));
         die q( ERR: Can't open logfile ) . $config->get(q(logfile)) . qq(: $!)
             unless ( defined $logfd );
-        # apply UTF-8-ness to the filehandle 
+        # apply UTF-8-ness to the filehandle
         $logfd->binmode(qq|:encoding(utf8)|);
     } else {
         # set :utf8 on STDOUT before wrapping it in IO::Handle
         binmode(STDOUT, qq|:encoding(utf8)|);
         $logfd = IO::Handle->new_from_fd(fileno(STDOUT), q(w));
-        die qq( ERR: could not wrap STDOUT in IO::Handle object: $!) 
+        die qq( ERR: could not wrap STDOUT in IO::Handle object: $!)
             unless ( defined $logfd );
     } # if ( exists $args{logfile} )
     $logfd->autoflush(1);
@@ -366,7 +357,7 @@ sub timelog {
 
 =back
 
-=head2 Template::File
+=head2 FactoidTool::File
 
 An object that represents the file that is to be streamed to the
 Icecast/Shoutcast server.  This is a helper object for the file that helps out
@@ -378,13 +369,13 @@ C<undef> if the file doesn't exist on the filesystem or can't be read.
 =cut
 
 ####################
-# Template::File #
+# FactoidTool::File #
 ####################
-package Template::File;
+package FactoidTool::File;
 use strict;
 use warnings;
 
-=over 
+=over
 
 =item new(filename => $file, logger => $logger, config => $config)
 
@@ -402,11 +393,11 @@ sub new {
         unless ( exists $args{filename} );
     $filename = $args{filename};
 
-    die qq( ERR: Template::Logger object required as 'logger =>')
+    die qq( ERR: FactoidTool::Logger object required as 'logger =>')
         unless ( exists $args{logger} );
     $logger = $args{logger};
-        
-    die qq( ERR: Template::Logger object required as 'logger =>')
+
+    die qq( ERR: FactoidTool::Logger object required as 'logger =>')
         unless ( exists $args{config} );
     $config = $args{config};
 
@@ -420,7 +411,7 @@ sub new {
 
     # some tests of the actual file on the filesystem
     # does it exist?
-    unless ( -e $self->get_filename() ) { 
+    unless ( -e $self->get_filename() ) {
         $logger->timelog( qq(WARN: Missing file on filesystem!) );
         $logger->log(qq(- ) . $self->get_display_name() );
         # return an undefined object so that callers know something's wrong
@@ -430,7 +421,7 @@ sub new {
     # previous step may have set $self to undef
     if ( defined $self ) {
         # can we read the file?
-        unless ( -r $self->get_filename() ) { 
+        unless ( -r $self->get_filename() ) {
             $logger->timelog( qq(WARN: Can't read file on filesystem!) );
             $logger->log(qq(- ) . $self->get_display_name() );
             # return an undefined object so that callers know something's wrong
@@ -455,27 +446,25 @@ use warnings;
 #use bytes; # I think this is used for the sysread call when reading MP3 files
 
     # create a logger object
-    my $config = Template::Config->new();
+    my $config = FactoidTool::Config->new();
 
     # create a logger object, and prime the logfile for this session
-    my $logger = Template::Logger->new($config);
+    my $logger = FactoidTool::Logger->new($config);
     $logger->timelog(qq(INFO: Starting factoid_tool.pl, version $VERSION));
     $logger->timelog(qq(INFO: my PID is $$));
 
     # reroute some signals to our handlers
     # exiting the script
-    $SIG{INT} = $SIG{TERM} = sub { 
+    $SIG{INT} = $SIG{TERM} = sub {
         my $signal = shift;
         $logger->timelog(qq(CRIT: Received SIG$signal; exiting...));
-        # close the connection to the icecast server
-        $conn->close();
     }; # $SIG{INT}
 
-    $SIG{HUP} = sub { 
+    $SIG{HUP} = sub {
         $logger->timelog(qq(INFO: Received SIGHUP;));
     }; # $SIG{HUP}
 
-    $SIG{USR1} = sub { 
+    $SIG{USR1} = sub {
         $logger->timelog(qq(INFO: Received SIGUSR1;));
     }; # $SIG{USR1}
 
