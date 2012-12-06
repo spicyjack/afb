@@ -73,9 +73,6 @@ L<Getopt::Long>.
 
 =cut
 
-# a list of valid arguments to this script
-my @_valid_script_args = ( qw(verbose config) );
-
 sub new {
     my $class = shift;
 
@@ -104,109 +101,12 @@ sub new {
     # assign the args hash to this object so it can be reused later on
     $self->{_args} = \%args;
 
-    # a check to verify the shout module is available
-    # it's put here so some warning is given if --help was called
-
-=begin comment
-
-    BEGIN {
-        eval q( use Shout; );
-        if ( $@ ) {
-            if ( defined grep(/-h|--help|-j|--gen-config/, @ARGV) ) {
-                warn qq(\nWARNING: Shout Perl module is not installed!\n\n);
-            } else {
-                warn qq( ERR: Shout module not installed\n);
-                warn qq( ERR: === Begin error output ===\n\n);
-                warn qq($@\n);
-                warn qq( ERR: === End error output ===\n);
-                die qq(Missing 'Shout' Perl module; exiting...);
-            } # if ( $self->get(q(help)) )
-        } # if ( $@ )
-    } # BEGIN
-
-=end comment
-
-=cut
-
     # dump and bail if we get called with --help
     if ( $self->get(q(help)) ) { pod2usage(-exitstatus => 1); }
-
-    # generate a config file and exit?
-    if ( defined $self->get(q(gen-config)) ) {
-        # apply the default configuration options to the Config object
-        $self->_apply_defaults();
-        # now print out the sample config file
-        print qq(# sample template config file\n);
-        print qq(# any line that starts with '#' is a comment\n);
-        print qq(# sample config generated on )
-            . POSIX::strftime( q(%c), localtime() ) . qq(\n);
-        # cheat a bit and add these last config settings
-        # here document syntax
-        print <<EOC;
-# more config file parameters here
-key1 = value1
-# commenting the logfile will log to STDOUT instead
-logfile = /path/to/output.log
-EOC
-        exit 0;
-    } # if ( exists $args{gen-config} )
-
-    # read a config file if that's specified
-    if ( defined $self->get(q(config)) && -r $self->get(q(config)) ) {
-        open( CFG, q(<) . $self->get(q(config)) );
-        my @config_lines = <CFG>;
-        my $config_errors = 0;
-        foreach my $line ( @config_lines ) {
-            chomp $line;
-            warn qq(VERB: parsing line '$line'\n)
-                if ( defined $self->get(q(verbose)));
-            next if ( $line =~ /^#/ );
-            my ($key, $value) = split(/\s*=\s*/, $line);
-            warn qq(VERB: key/value for line is '$key'/'$value'\n)
-                if ( defined $self->get(q(verbose)));
-            if ( grep(/$key/, @_valid_script_args) > 0 ) {
-                $self->set($key => $value);
-            } else {
-                warn qq(WARN: unknown config line found in )
-                    . $self->get(q(config)) . qq(\n);
-                warn qq(WARN: unknown config line key/value: $key/$value\n);
-                $config_errors++;
-            } # if ( grep($key, @_valid_shout_args) > 0 )
-        } # foreach my $line ( @config_lines )
-        if ( defined $self->get(q(check-config)) ) {
-            warn qq|Found $config_errors total config error(s)\n|;
-            warn qq(Exiting script...\n);
-            exit 0;
-        } # if ( defined $self->get(q(check-config)) )
-    } # if ( exists $args{config} && -r $args{config} )
-
-=begin comment
-
-    # some checks to make sure we have needed arguments
-    die qq( ERR: script called without --config or --filelist arguments;\n)
-        . qq( ERR: run script with --help switch for usage examples\n)
-        unless ( defined $self->get(q(filelist)) );
-
-=end comment
-
-=cut
-
-    # apply script defaults to whatver remaining key/value pairs don't have
-    # anything set
-    $self->_apply_defaults();
 
     # return this object to the caller
     return $self;
 } # sub new
-
-# set defaults here for any missing arugments
-sub _apply_defaults {
-    my $self = shift;
-    # icecast defaults
-    $self->set( user => q(source) ) unless ( defined $self->get(q(user)) );
-    $self->set( password => q(default) ) unless (
-        defined $self->get(q(password)) );
-} # sub _apply_defaults
 
 =item get($key)
 
@@ -374,6 +274,7 @@ C<undef> if the file doesn't exist on the filesystem or can't be read.
 package FactoidTool::File;
 use strict;
 use warnings;
+use DBM::Deep;
 
 =over
 
@@ -407,6 +308,7 @@ sub new {
         _logger => $logger,
         _config => $config,
         _filename => $filename,
+        _db => undef,
     }, $class);
 
     # some tests of the actual file on the filesystem
@@ -429,6 +331,11 @@ sub new {
         } # unless ( -r $self->get_filename() )
     } # if ( defined $self )
 
+    my $db = DBM::Deep->new(
+        file => $self->get_filename(),
+        type => TYPE_HASH,
+    );
+    $self->{_db} = $db;
     return $self
 } # sub new
 
@@ -453,20 +360,8 @@ use warnings;
     $logger->timelog(qq(INFO: Starting factoid_tool.pl, version $VERSION));
     $logger->timelog(qq(INFO: my PID is $$));
 
-    # reroute some signals to our handlers
-    # exiting the script
-    $SIG{INT} = $SIG{TERM} = sub {
-        my $signal = shift;
-        $logger->timelog(qq(CRIT: Received SIG$signal; exiting...));
-    }; # $SIG{INT}
+    my (%factiods_is, %factoids_are);
 
-    $SIG{HUP} = sub {
-        $logger->timelog(qq(INFO: Received SIGHUP;));
-    }; # $SIG{HUP}
-
-    $SIG{USR1} = sub {
-        $logger->timelog(qq(INFO: Received SIGUSR1;));
-    }; # $SIG{USR1}
 
 =head1 AUTHOR
 
