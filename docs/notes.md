@@ -7,4 +7,4 @@
   and return a full set of cached words as soon as the first letter is typed
 - AJAX-ian search interface
 
-# vim: filetype=markdown shiftwidth=2 tabstop=2
+vim: filetype=markdown shiftwidth=2 tabstop=2
