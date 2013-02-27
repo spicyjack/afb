@@ -268,13 +268,12 @@ C<undef> if the file doesn't exist on the filesystem or can't be read.
 
 =cut
 
-####################
+#####################
 # FactoidTool::File #
-####################
+#####################
 package FactoidTool::File;
 use strict;
 use warnings;
-use DBM::Deep;
 
 =over
 
@@ -331,11 +330,11 @@ sub new {
         } # unless ( -r $self->get_filename() )
     } # if ( defined $self )
 
-    my $db = DBM::Deep->new(
-        file => $self->get_filename(),
-        type => TYPE_HASH,
-    );
-    $self->{_db} = $db;
+#    my $db = DBM::Deep->new(
+#        file => $self->get_filename(),
+#        type => TYPE_HASH,
+#    );
+#    $self->{_db} = $db;
     return $self
 } # sub new
 
@@ -349,6 +348,9 @@ sub new {
 package main;
 use strict;
 use warnings;
+BEGIN { @AnyDBM_File::ISA = qw(DB_File GDBM_File NDBM_File) }
+use AnyDBM_File;
+use Fcntl qw(/^O_/);
 
 #use bytes; # I think this is used for the sysread call when reading MP3 files
 
@@ -360,8 +362,21 @@ use warnings;
     $logger->timelog(qq(INFO: Starting factoid_tool.pl, version $VERSION));
     $logger->timelog(qq(INFO: my PID is $$));
 
-    my (%factiods_is, %factoids_are);
+    my %factoids;
 
+    # tie(%variable, $module_name, $db_filename, $mask)
+    foreach my $filename ( @{$config->get(q(file))} ) {
+        tie(%factoids, q(AnyDBM_File), $filename, O_RDONLY, undef)
+            || die "Couldn't open " .  $filename . " with AnyDBM_File: $!";
+
+        foreach my $key(sort(keys(%factoids))) {
+            print qq($key => ) . $factoids{$key} . qq(\n);
+        }
+
+        untie(%factoids) || die "untie() on " .  $config->get(q(file)) 
+            . " failed: $!";
+    }
+exit 0;
 
 =head1 AUTHOR
 
@@ -380,7 +395,7 @@ You can find documentation for this script with the perldoc command.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2012 Brian Manning, all rights reserved.
+Copyright (c) 2012-2013 Brian Manning, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
