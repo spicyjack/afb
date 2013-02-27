@@ -5,6 +5,13 @@
 # Your application's name
 appname: "App::Factoid::Browser"
 
+# What environment are we running under?
+# #environment: "production"
+environment: "development"
+
+# How to serialize data?
+serialization: "JSON"
+
 # The default layout to use for your application (located in
 # views/layouts/main.tt)
 layout: "main"
