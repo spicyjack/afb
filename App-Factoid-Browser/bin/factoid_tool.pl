@@ -279,8 +279,7 @@ use warnings;
 
 =item new(filename => $file, logger => $logger, config => $config)
 
-Creates an object that wraps the file to be streamed, so that requests for
-file metadata can be answered.
+Creates an object that wraps the factoid file.
 
 =cut
 
@@ -289,7 +288,7 @@ sub new {
     my %args = @_;
 
     my ($filename, $logger, $config);
-    die qq( ERR: Missing file to be streamed as 'filename =>')
+    die qq( ERR: Missing factoid filename as 'filename =>')
         unless ( exists $args{filename} );
     $filename = $args{filename};
 
