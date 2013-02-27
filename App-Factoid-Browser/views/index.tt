@@ -41,7 +41,7 @@
             <h3>Your application's environment</h3>
 
             <ul>
-                <li>Location: <code>/Users/brian/src/pfb.git/App-Factoid-Browser</code></li>
+                <li>Location: <code><% settings.appdir %></code></li>
                 <li>Template engine: <code><% settings.template %></code></li>
                 <li>Logger: <code><% settings.logger %></code></li>
                 <li>Environment: <code><% settings.environment %></code></li>
@@ -81,7 +81,7 @@
                 </tr>
                 <tr>
                     <td>Appdir</td>
-                    <td><tt>/Users/brian/src/pfb.git/App-Factoid-Browser</tt></td>
+                    <td><tt><% settings.appdir %></tt></td>
                 </tr>
                 <tr>
                     <td>Template engine</td>
