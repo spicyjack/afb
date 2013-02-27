@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright (c) 2012 by Brian Manning <elspicyjack at gmail dot com>
+# Copyright (c) 2012 by Brian Manning <devspam at xaoc dot org>
 # For help with script errors and feature requests,
 # please contact the author on IRC;
 # irc.freenode.net #kernel-panic, nick: spicyjack
@@ -348,11 +348,8 @@ sub new {
 package main;
 use strict;
 use warnings;
-BEGIN { @AnyDBM_File::ISA = qw(DB_File GDBM_File NDBM_File) }
 use AnyDBM_File;
 use Fcntl qw(/^O_/);
-
-#use bytes; # I think this is used for the sysread call when reading MP3 files
 
     # create a logger object
     my $config = FactoidTool::Config->new();
@@ -366,7 +363,7 @@ use Fcntl qw(/^O_/);
 
     # tie(%variable, $module_name, $db_filename, $mask)
     foreach my $filename ( @{$config->get(q(file))} ) {
-        tie(%factoids, q(AnyDBM_File), $filename, O_RDONLY, undef)
+        tie(%factoids, q(AnyDBM_File), $filename, O_RDONLY, 0644)
             || die "Couldn't open " .  $filename . " with AnyDBM_File: $!";
 
         foreach my $key(sort(keys(%factoids))) {
@@ -380,7 +377,7 @@ exit 0;
 
 =head1 AUTHOR
 
-Brian Manning, C<< <brian at xaoc dot org> >>
+Brian Manning, C<< <devspam at xaoc dot org> >>
 
 =head1 BUGS
 
