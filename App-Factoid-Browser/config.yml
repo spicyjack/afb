@@ -5,6 +5,9 @@
 # Your application's name
 appname: "App::Factoid::Browser"
 
+# Tell Dancer we're behind a proxy
+behind_proxy: "true"
+
 # What environment are we running under?
 # #environment: "production"
 environment: "development"
