@@ -7,4 +7,8 @@
   and return a full set of cached words as soon as the first letter is typed
 - AJAX-ian search interface
 
+## Logo Ideas ##
+- http://www.chrisbeetles.com/sites/default/files/stock-images/MIRANDA-THE-TEMPESTTHE-CHARACTER-OF-MIRANDA-RESOLVES-ITSELF-INTO-THE-VERY-ELEMENTS-OF-WOMANHOOD-1-T0182.jpg
+- http://en.wikipedia.org/wiki/Miranda_(moon)
+
 vim: filetype=markdown shiftwidth=2 tabstop=2
