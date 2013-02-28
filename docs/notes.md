@@ -18,6 +18,8 @@ Should I do, I will do, I just did
   and return a full set of cached words as soon as the first letter is typed
 - AJAX-ian search interface
 - IRC bot that responds to requests for searches and random URLs
+- "Lock" - lock definitions, and replace them via interaction via IRC when
+  they get tampered with
 
 ## Logo Ideas ##
 - http://www.chrisbeetles.com/sites/default/files/stock-images/MIRANDA-THE-TEMPESTTHE-CHARACTER-OF-MIRANDA-RESOLVES-ITSELF-INTO-THE-VERY-ELEMENTS-OF-WOMANHOOD-1-T0182.jpg
