@@ -17,7 +17,9 @@ serialization: "JSON"
 
 # The default layout to use for your application (located in
 # views/layouts/main.tt)
-layout: "main"
+#layout: "main"
+# changes layout, layout points to new stylesheet 'miranda.css'
+layout: "miranda"
 
 # when the charset is set to UTF-8 Dancer will handle for you
 # all the magic of encoding and decoding. You should not care
