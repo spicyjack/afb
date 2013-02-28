@@ -14,23 +14,26 @@ our $VERSION = '0.1';
 
 ### DEFAULT PAGE ###
 get q(/) => sub {
+    set layout => q(miranda);
     template 'index';
 };
 
 ### DEFAULT PAGE ###
 get q(/original) => sub {
-    template 'index.orig';
+    set layout => q(main);
+    template    q(index.orig);
 };
 
 ### /all ###
 get q(/all) => sub {
-    #template 'index';
+    set layout => q(miranda);
     foreach my $key(sort(keys(%factoids))) {
         print qq($key => ) . $factoids{$key} . qq(\n);
     }
 };
 
 get q(/search/:query) => sub {
+    set layout => q(miranda);
     my $query = param(q(query));
     debug(qq(/search/query; Query string is: $query));
     my @found_keys = grep(/$query/, keys(%factoids));
