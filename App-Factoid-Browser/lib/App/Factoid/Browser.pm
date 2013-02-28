@@ -27,9 +27,12 @@ get q(/original) => sub {
 ### /all ###
 get q(/all) => sub {
     set layout => q(miranda);
+    print qq(HTTP/1.1 200 OK\nContent-type: text/html\n\n);
+    print qq(<html>\n<body>\n);
     foreach my $key(sort(keys(%factoids))) {
-        print qq($key => ) . $factoids{$key} . qq(\n);
+        print qq(<div>$key => ) . $factoids{$key} . qq(</div>\n);
     }
+    print qq(</body>\n</html>\n);
 };
 
 get q(/search/:query) => sub {
@@ -38,9 +41,12 @@ get q(/search/:query) => sub {
     debug(qq(/search/query; Query string is: $query));
     my @found_keys = grep(/$query/, keys(%factoids));
     debug(qq(/search/query; Found ) . scalar(@found_keys) . qq( keys));
+    print qq(HTTP/1.1 200 OK\nContent-type: text/html\n\n);
+    print qq(<html>\n<body>\n);
     foreach my $key ( @found_keys ) {
-        print qq($key => ) . $factoids{$key} . qq(\n);
+        print qq(<div>$key => ) . $factoids{$key} . qq(</div>\n);
     }
+    print qq(</body>\n</html>\n);
 };
 
 # Exiting the script should close the filehandle
