@@ -3,12 +3,6 @@ body {
 margin: 0;
 margin-bottom: 25px;
 padding: 0;
-/* 
-background-color: #ddd;
-background-image: url("/img/perldancer-bg.jpg");
-background-repeat: no-repeat;
-background-position: top left;
-*/
 font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
 font-size: 13px;
 color: #333;
@@ -55,12 +49,6 @@ padding-right: 30px;
 
 
 #header {
-/*
-background-image: url("/img/perldancer.jpg");
-background-repeat: no-repeat;
-background-position: top left;
-height: 64px;
-*/
 }
 #header h1, #header h2 {margin: 0}
 #header h2 {
@@ -76,10 +64,11 @@ font-size: 14px;
 }
 
 #about-content {
+position: absolute;
+left: 60%;
 background-color: #ffd;
 border: 1px solid #fc0;
-margin-left: 1em;
-width: 60%;
+width: 35%;
 }
 #about-content table {
 margin-top: 10px;
@@ -104,42 +93,6 @@ margin: 0;
 padding: 10px;
 }
 
-#getting-started {
-border-top: 1px solid #ccc;
-margin-top: 25px;
-padding-top: 15px;
-}
-#getting-started h1 {
-margin: 0;
-font-size: 20px;
-}
-#getting-started h2 {
-margin: 0;
-font-size: 14px;
-font-weight: normal;
-color: #333;
-margin-bottom: 25px;
-}
-#getting-started ol {
-margin-left: 0;
-padding-left: 0;
-}
-#getting-started li {
-font-size: 18px;
-color: #888;
-margin-bottom: 25px;
-}
-#getting-started li h2 {
-margin: 0;
-font-weight: normal;
-font-size: 18px;
-color: #333;
-}
-#getting-started li p {
-color: #555;
-font-size: 13px;
-}
-
 #search {
 margin: 0;
 padding-top: 10px;
@@ -151,23 +104,6 @@ font-size: 11px;
 margin: 2px;
 }
 #search-text {width: 170px}
-
-#sidebar ul {
-margin-left: 0;
-padding-left: 0;
-}
-#sidebar ul h3 {
-margin-top: 25px;
-font-size: 16px;
-padding-bottom: 10px;
-border-bottom: 1px solid #ccc;
-}
-#sidebar li {
-list-style-type: none;
-}
-#sidebar ul.links li {
-margin-bottom: 5px;
-}
 
 h1, h2, h3, h4, h5 {
 font-family: sans-serif;
