@@ -1,48 +1,62 @@
-<a href="#" id="about_env_link">Miranda's environment</a>
+<div class="navbar navbar-inverse">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Miranda Factoid Browser</a>
+    <ul class="nav">
+      <li class="active"><a href="#">Search</a></li>
+      <li><a href="#">Browse</a></li>
+      <li class="divider-vertical"></li>
+      <li><a href="#">Random factoid</a></li>
+      <li class="divider-vertical"></li>
+      <li><a href="#">Random URL</a></li>
+      <li class="divider-vertical"></li>
+      <li><a href="#" id="about_env_link">Miranda's environment</a></li> 
+    </ul>
+  </div>
 
-<div id="about-content" style="display: none;">
-<table>
-    <tbody>
-    <tr>
-        <td>Perl version</td>
-        <td><tt><% perl_version %></tt></td>
-    </tr>
-    <tr>
-        <td>Dancer version</td>
-        <td><tt><% dancer_version %></tt></td>
-    </tr>
-    <tr>
-        <td>Backend</td>
-        <td><tt><% settings.apphandler %></tt></td>
-    </tr>
-    <tr>
-        <td>Appdir</td>
-        <td><tt><% settings.appdir %></tt></td>
-    </tr>
-    <tr>
-        <td>Template engine</td>
-        <td><tt><% settings.template %></tt></td>
-    </tr>
-    <tr>
-        <td>Logger engine</td>
-        <td><tt><% settings.logger %></tt></td>
-    </tr>
-    <tr>
-        <td>Running environment</td>
-        <td><tt><% settings.environment %></tt></td>
-    </tr>
-    </tbody>
-</table>
+    <div id="about-content" style="display: none;">
+    <table>
+        <tbody>
+        <tr>
+            <td>Perl version</td>
+            <td><tt><% perl_version %></tt></td>
+        </tr>
+        <tr>
+            <td>Dancer version</td>
+            <td><tt><% dancer_version %></tt></td>
+        </tr>
+        <tr>
+            <td>Backend</td>
+            <td><tt><% settings.apphandler %></tt></td>
+        </tr>
+        <tr>
+            <td>Appdir</td>
+            <td><tt><% settings.appdir %></tt></td>
+        </tr>
+        <tr>
+            <td>Template engine</td>
+            <td><tt><% settings.template %></tt></td>
+        </tr>
+        <tr>
+            <td>Logger engine</td>
+            <td><tt><% settings.logger %></tt></td>
+        </tr>
+        <tr>
+            <td>Running environment</td>
+            <td><tt><% settings.environment %></tt></td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+  </div>
 </div>
-
-    <script type="text/javascript">
-    $('#about_env_link').click(function() {
-        $('#about-content').slideToggle('fast', function() {
-            // ok
-        });
-        return( false );
-    });
-    </script>
+  <script type="text/javascript">
+  $('#about_env_link').click(function() {
+      $('#about-content').slideToggle('fast', function() {
+          // ok
+      });
+      return( false );
+  });
+  </script>
 <!-- 
 vim: filetype=html shiftwidth=2 tabstop=2: 
 --> 
