@@ -1,0 +1,20 @@
+  <!-- ===================== Navbar ===================== -->
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="#">Miranda Factoid Browser</a>
+        <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li class=""><a href="/">Search</a></li>
+          <li class=""><a href="/browse">Browse</a></li>
+          <li class="active"><a href="/random">Random factoid</a></li>
+          <li class=""><a href="/randomurl">Random URL</a></li>
+        </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 
+vim: filetype=html shiftwidth=2 tabstop=2: 
+--> 

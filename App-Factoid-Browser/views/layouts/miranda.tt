@@ -16,15 +16,14 @@
 <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
-<% content %>
+<div class="container">
+  <% content %>
 
-<div class="row-fluid">
-  <div class="span12">
-    <div id="footer">
-      Powered by <a href="http://perldancer.org/">Dancer</a> 
-      <% dancer_version %>
-    </div>
+  <div id="footer">
+    Powered by <a href="http://perldancer.org/">Dancer</a>
+    <% dancer_version %>
   </div>
+
 </div>
 </body>
 <!--
