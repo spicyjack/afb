@@ -12,16 +12,16 @@ our $VERSION = '0.1';
     tie(%factoids, q(AnyDBM_File), $filename, O_RDONLY, 0644)
         || die "Couldn't open " .  $filename . " with AnyDBM_File: $!";
 
-### DEFAULT PAGE ###
-get q(/) => sub {
-    set layout => q(miranda);
-    template q(index);
-};
-
 ### original Dancer page ###
 get q(/original) => sub {
     set layout => q(main);
     template q(index.orig);
+};
+
+### DEFAULT PAGE ###
+get q(/) => sub {
+    set layout => q(miranda);
+    template q(index);
 };
 
 ### /browse ###
@@ -42,16 +42,22 @@ get q(/browse) => sub {
 
 };
 
-### /search page ###
-get q(/search/:query) => sub {
+### /random page ###
+get q(/random) => sub {
     set layout => q(miranda);
-    template q(search);
+    template q(random);
+};
+
+### /random/urlpage ###
+get q(/randomurl) => sub {
+    set layout => q(miranda);
+    template q(randomurl);
 };
 
 ### /search with a :query ###
 get q(/search/:query) => sub {
     set layout => q(miranda);
-    template q(search);
+    template q(index);
     my $query = param(q(query));
     debug(qq(/search/query; Query string is: $query));
     my @found_keys = grep(/$query/, keys(%factoids));
