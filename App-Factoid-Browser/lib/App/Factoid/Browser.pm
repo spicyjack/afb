@@ -1,16 +1,19 @@
 package App::Factoid::Browser;
 use Dancer;
 use AnyDBM_File;
+use GDBM_File;
 use Fcntl qw(/^O_/);
 
 our $VERSION = '0.1';
 
 ## setup
     my %factoids;
-    my $filename = q(/srv/www/purl/html/Prospero/Prospero-is);
+    my $dbm_driver = q(GDBM_File);
+    my $filename = q(/Users/brian/Downloads/Factoids/Prospero-is.dir);
+    #my $filename = q(/srv/www/purl/html/Prospero/Prospero-is);
     debug(qq(Reading in factoids from $filename));
-    tie(%factoids, q(AnyDBM_File), $filename, O_RDONLY, 0644)
-        || die "Couldn't open " .  $filename . " with AnyDBM_File: $!";
+    tie(%factoids, $dbm_driver, $filename, O_RDONLY, 0644)
+        || die "Couldn't open " .  $filename . " with $dbm_driver: $!";
 
 ### original Dancer page ###
 get q(/original) => sub {
