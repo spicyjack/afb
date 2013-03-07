@@ -17,6 +17,12 @@
     </div>
   </div>
 
+  <!-- ===================== Search box ===================== -->
+  <form>
+    <input type="text" placeholder="Search factoids">
+  </form>
+
+  <!-- ===================== About display ===================== -->
   <div id="about-content" style="display: none;">
   <table>
       <tbody>
