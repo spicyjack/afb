@@ -8,9 +8,16 @@ our $VERSION = '0.1';
 
 ## setup
     my %factoids;
-    my $dbm_driver = q(GDBM_File);
-    my $filename = q(/Users/brian/Downloads/Factoids/Prospero-is.dir);
-    #my $filename = q(/srv/www/purl/html/Prospero/Prospero-is);
+
+    # FIXME turn this into config variables
+
+    # Apple OS X
+    # my $dbm_driver = q(GDBM_File);
+    #my $filename = q(/Users/brian/Downloads/Factoids/Prospero-is.dir);
+
+    my $dbm_driver = q(AnyDBM_File);
+    my $filename = q(/srv/www/purl/html/Prospero/Prospero-is);
+
     debug(qq(Reading in factoids from $filename));
     tie(%factoids, $dbm_driver, $filename, O_RDONLY, 0644)
         || die "Couldn't open " .  $filename . " with $dbm_driver: $!";
