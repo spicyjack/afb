@@ -15,8 +15,8 @@ our $VERSION = '0.1';
     # my $dbm_driver = q(GDBM_File);
     #my $filename = q(/Users/brian/Downloads/Factoids/Prospero-is.dir);
 
-    my $dbm_driver = q(AnyDBM_File);
-    my $filename = q(/srv/www/purl/html/Prospero/Prospero-is);
+    my $dbm_driver = config->dbm_driver;
+    my $filename = config->dbm_filename;
 
     debug(qq(Reading in factoids from $filename));
     tie(%factoids, $dbm_driver, $filename, O_RDONLY, 0644)
