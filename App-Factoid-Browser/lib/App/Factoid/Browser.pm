@@ -87,7 +87,7 @@ get q(/original) => sub {
 
 ### DEFAULT PAGE ###
 get q(/) => sub {
-    template q(index);
+    template q(search);
 };
 
 ### /browse ###
@@ -119,7 +119,7 @@ get q(/randomurl) => sub {
 
 ### /search with a :query ###
 get q(/search/:query) => sub {
-    template q(index);
+    template q(search);
     my $query = param(q(query));
     debug(qq(/search/query; Query string is: $query));
     my @found_factoids = grep(/$query/, @combined_factoids);
@@ -132,7 +132,7 @@ get q(/search/:query) => sub {
 
 ### /search with a :query ###
 get q(/search/:query/:start_num) => sub {
-    template q(index);
+    template q(search);
     my $query = param(q(query));
     debug(qq(/search/query; Query string is: $query));
     my @found_factoids = grep(/$query/, @combined_factoids);
