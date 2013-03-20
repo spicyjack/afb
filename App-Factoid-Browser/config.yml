@@ -8,8 +8,11 @@ appname: "App::Factoid::Browser"
 # Tell Dancer we're behind a proxy
 behind_proxy: "true"
 
+# Return objects instead of hash references when 'config' is queried
+strict_config: "true"
+
 # What environment are we running under?
-# #environment: "production"
+#environment: "production"
 environment: "development"
 
 # How to serialize data?
