@@ -15,4 +15,8 @@ Browse and search for Infobot factoids from the comfort of your web browser.
   - `scripts/get_factoids.sh`
   - Downloads factoids from remote server, creates tarball for re-downloading
 
+## Licensing ##
+This software is released under the terms of the *Perl Artistic License*, a
+copy of which can be viewed at http://dev.perl.org/licenses/artistic.html.
+
 vim: filetype=markdown tabstop=2 shiftwidth=2
