@@ -11,6 +11,8 @@ Should I do, I will do, I just did
 - Get searching of factoids working
   - Create a highlight `<span>` tag that is used to highlight search terms
   - Show the search term, along with a link to toggle highlighting
+  - Show the number of search hits found at the bottom of the page
+  - Show page navigation if there are more search terms than fit on one page
 - Factoid stats
   - Put them on their own page
   - Total number of factoids
