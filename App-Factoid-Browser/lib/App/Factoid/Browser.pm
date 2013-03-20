@@ -1,4 +1,5 @@
 package App::Factoid::Browser;
+use Carp;
 use Dancer;
 use AnyDBM_File;
 use GDBM_File;
@@ -10,16 +11,19 @@ our $VERSION = '0.1';
 ## setup
     my (%factoids_is, %factoids_are);
 
-    my ($dbm_driver, $dbm_filename);
     debug(qq(Current environment: ) . config->environment);
-    debug(qq(Reading in factoids from: ) . config->dbm_filename);
+    debug(qq(Reading in factoids from: ) . config->dbm_basename);
     debug(qq(Using database driver: ) . config->dbm_driver);
-    tie(%factoids_is, config->dbm_driver, config->dbm_filename . q(-is.dir), O_RDONLY, 0644)
-        || die q(Couldn't open ) .  config->dbm_filename . q(-is with )
+    tie(%factoids_is, config->dbm_driver, config->dbm_basename . q(-is.dir),
+        O_RDONLY, 0644)
+        || confess q(Couldn't open ) .  config->dbm_basename . q(-is.dir with )
             . config->dbm_driver . qq(: $!);
-    tie(%factoids_are, config->dbm_driver, config->dbm_filename, O_RDONLY, 0644)
-        || die q(Couldn't open ) .  config->dbm_filename . q(-is with )
+    tie(%factoids_are, config->dbm_driver, config->dbm_basename . q(-are.dir),
+        O_RDONLY, 0644)
+        || confess q(Couldn't open ) .  config->dbm_basename . q(-are.dir with )
             . config->dbm_driver . qq(: $!);
+    # FIXME how to combine the is/are factoids so keys don't step on each
+    # other? pre-make HTML output with correct styles?
 
 ### original Dancer page ###
 get q(/original) => sub {
@@ -36,19 +40,14 @@ get q(/) => sub {
 ### /browse ###
 get q(/browse) => sub {
     set layout => q(miranda);
-    template(q(browse), { factoids => \%factoids });
+    template(q(browse), { factoids => \%factoids_is });
+};
 
-=pod
-
-    print qq(HTTP/1.1 200 OK\nContent-type: text/html\n\n);
-    print qq(<html>\n<body>\n);
-    foreach my $key(sort(keys(%factoids))) {
-        print qq(<div>$key => ) . $factoids{$key} . qq(</div>\n);
-    }
-    print qq(</body>\n</html>\n);
-
-=cut
-
+### /browse/:start_num ###
+get q(/browse/:start_num) => sub {
+    set layout => q(miranda);
+    # FIXME create a subset of factoids, based on the :start_num amount
+    template(q(browse), { factoids => \%factoids_is });
 };
 
 ### /random page ###
@@ -69,7 +68,7 @@ get q(/search/:query) => sub {
     template q(index);
     my $query = param(q(query));
     debug(qq(/search/query; Query string is: $query));
-    my @found_keys = grep(/$query/, keys(%factoids));
+    my @found_keys = grep(/$query/, keys(%factoids_is));
     debug(qq(/search/query; Found ) . scalar(@found_keys) . qq( keys));
 
 =pod
@@ -86,5 +85,6 @@ get q(/search/:query) => sub {
 };
 
 # Exiting the script should close the filehandle
-# untie(%factoids) || die "untie() on " . $filename . " failed: $!";
+# untie(%factoids-is) || die "untie() on " . config->dbm_basename 
+#   . " failed: $!";
 true;
