@@ -10,18 +10,12 @@ our $VERSION = '0.1';
     my %factoids;
 
     my ($dbm_driver, $dbm_filename);
-    if ( config->environment eq q(pig_dev) ) {
-        $dbm_driver = q(GDBM_File);
-        $dbm_filename = q(/Users/brian/Downloads/Factoids/Prospero-is.dir);
-    } else {
-        $dbm_driver = q(AnyDBM_File);
-        $dbm_filename = q(/srv/www/purl/html/Prospero/Prospero-is.dir);
-    }
-
     debug(qq(Current environment: ) . config->environment);
-    debug(qq(Reading in factoids from $dbm_filename));
-    tie(%factoids, $dbm_driver, $dbm_filename, O_RDONLY, 0644)
-        || die "Couldn't open " .  $dbm_filename . " with $dbm_driver: $!";
+    debug(qq(Reading in factoids from: ) . config->dbm_filename);
+    debug(qq(Using database driver: ) . config->dbm_driver);
+    tie(%factoids, config->dbm_driver, config->dbm_filename, O_RDONLY, 0644)
+        || die q(Couldn't open ) .  config->dbm_filename . q( with )
+            . config->dbm_driver . qq(: $!);
 
 ### original Dancer page ###
 get q(/original) => sub {
