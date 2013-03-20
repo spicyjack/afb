@@ -1,7 +1,8 @@
 # configuration file for development environment
 
+# database driver and location of the is/are databases
 dbm_driver: "AnyDBM_File"
-dbm_filename: "/srv/www/purl/html/Prospero/Prospero-is.dir"
+dbm_basename: "/srv/www/purl/html/Prospero/Prospero"
 
 # the logger engine to use
 # console: log messages to STDOUT (your console where you started the

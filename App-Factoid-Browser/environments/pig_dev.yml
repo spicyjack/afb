@@ -1,7 +1,8 @@
 # configuration file for development environment
 
+# database driver and location of the is/are databases
 dbm_driver: "GDBM_File"
-dbm_filename: "/Users/brian/Downloads/Factoids/Prospero-is.dir"
+dbm_basename: "/Users/brian/Downloads/Factoids/Prospero"
 
 # the logger engine to use
 # console: log messages to STDOUT (your console where you started the
