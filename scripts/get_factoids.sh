@@ -19,7 +19,7 @@ do
     # if the db file is not compacted when a factoid is deleted, then 
     # the test below will not catch differences
     # TODO parse the old and new factoid files, and compare by key/value?
-    if [ $NEW_FILE_SIZE -gt $OLD_FILE_SIZE ]; then
+    if [ $NEW_FILE_SIZE -ge $OLD_FILE_SIZE ]; then
         mv -f ${TEMP_DIR}/${FILE} ${OUTPUT_DIR}/${FILE}
     else
         rm -f ${TEMP_DIR}/${FILE}
