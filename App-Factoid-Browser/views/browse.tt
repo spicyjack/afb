@@ -15,6 +15,10 @@
     </div>
   </div>
 
+<% FOR e IN factoids.keys.sort %>
+  <div class="highlight"><% e %> =&gt; <% factoids.$e %></div>
+<% END %>
+
 <!-- 
 vim: filetype=html shiftwidth=2 tabstop=2: 
 --> 

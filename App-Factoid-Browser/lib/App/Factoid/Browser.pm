@@ -3,6 +3,7 @@ use Dancer;
 use AnyDBM_File;
 use GDBM_File;
 use Fcntl qw(/^O_/);
+use Template;
 
 our $VERSION = '0.1';
 
@@ -32,7 +33,7 @@ get q(/) => sub {
 ### /browse ###
 get q(/browse) => sub {
     set layout => q(miranda);
-    template q(browse);
+    template(q(browse), { factoids => \%factoids });
 
 =pod
 
