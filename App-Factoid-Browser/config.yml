@@ -13,7 +13,7 @@ strict_config: "true"
 
 # What environment are we running under?
 #environment: "production"
-environment: "development"
+#environment: "development"
 
 # How to serialize data?
 serialization: "JSON"

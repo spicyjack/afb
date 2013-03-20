@@ -1,9 +1,5 @@
 # configuration file for development environment
 
-# config parameters for the app
-dbm_driver: "GDBM_File"
-dbm_filename: "/Users/brian/Downloads/Factoids/Prospero-is.dir"
-
 # the logger engine to use
 # console: log messages to STDOUT (your console where you started the
 #          application server)
