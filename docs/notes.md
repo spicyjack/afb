@@ -22,7 +22,6 @@ Should I do, I will do, I just did
   it shouldn't
 - Fix the page header, factoids are getting stuck above the header, they
   should be displaying below the header
-- Colorize rows on the page so every other row is a different color
 - Change the links at the top of the page so they change the DOM instead of
   loading a different page
 
@@ -61,5 +60,6 @@ Should I do, I will do, I just did
 - Limit the display of factoids to only 25 per screen
 - Get browsing using :start_num working
   - Create a subset of factoids to return to the user
+- Colorize rows on the page so every other row is a different color
 
 vim: filetype=markdown shiftwidth=2 tabstop=2
