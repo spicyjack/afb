@@ -1,5 +1,9 @@
 # configuration file for production environment
 
+# config parameters for the app
+dbm_driver: "AnyDBM_File"
+dbm_filename: "/srv/www/purl/html/Prospero/Prospero-is"
+
 # only log warning and error messsages
 log: "warning"
 
@@ -14,4 +18,3 @@ show_errors: 0
 
 # cache route resolution for maximum performance
 route_cache: 1
-
