@@ -8,6 +8,26 @@ Should I do, I will do, I just did
     default regex pattern, warn if any factoids don't match the pattern (i.e.
     they won't be able to be found because their corresponding search strings
     will be sanitized by the regex)
+- Combine the `is/are` databases so they can be displayed as one set of
+  factoids, and also paginated consistently
+- Limit the display of factoids to only 25 per screen
+- Get browsing using :start_num working
+  - Create a subset of factoids to return to the user
+- Get searching of factoids working
+  - Create a highlight `<span>` tag that is used to highlight search terms
+  - Show the search term, along with a link to toggle highlighting
+- Factoid stats
+  - Put them on their own page
+  - Total number of factoids
+  - Number of `is` factoids
+  - Number of `are` factoids
+  - Longest factoid
+  - Word counts for commonly used words
+- Fix the page footer (with Dancer version and link), it's scrolling up when
+  it shouldn't
+- Colorize rows on the page so every other row is a different color
+- Change the links at the top of the page so they change the DOM instead of
+  loading a different page
 
 ## API List ##
 - `/browse` - Browse factoids
