@@ -8,14 +8,17 @@ use Template;
 our $VERSION = '0.1';
 
 ## setup
-    my %factoids;
+    my (%factoids_is, %factoids_are);
 
     my ($dbm_driver, $dbm_filename);
     debug(qq(Current environment: ) . config->environment);
     debug(qq(Reading in factoids from: ) . config->dbm_filename);
     debug(qq(Using database driver: ) . config->dbm_driver);
-    tie(%factoids, config->dbm_driver, config->dbm_filename, O_RDONLY, 0644)
-        || die q(Couldn't open ) .  config->dbm_filename . q( with )
+    tie(%factoids_is, config->dbm_driver, config->dbm_filename . q(-is.dir), O_RDONLY, 0644)
+        || die q(Couldn't open ) .  config->dbm_filename . q(-is with )
+            . config->dbm_driver . qq(: $!);
+    tie(%factoids_are, config->dbm_driver, config->dbm_filename, O_RDONLY, 0644)
+        || die q(Couldn't open ) .  config->dbm_filename . q(-is with )
             . config->dbm_driver . qq(: $!);
 
 ### original Dancer page ###
