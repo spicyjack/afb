@@ -17,7 +17,7 @@
 
 <div class="container">
 <% FOR e IN factoids.list %>
-  <div class="line"><% e %></div>
+  <% e %>
 <% END %>
 </div>
 

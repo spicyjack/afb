@@ -115,12 +115,12 @@ line-height: 1.5em;
 margin: 1.6em 0;
 }
 
-.line, code, tt {
+.altline, .line, code, tt {
     font-family: 'Andale Mono', Monaco, 'Liberation Mono', 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', monospace;
 }
 
 .altline {
-    background: #333;
+    background: #eef;
 }
 
 .line_num {
@@ -129,7 +129,7 @@ margin: 1.6em 0;
 }
 
 .is {
-    background: #cff;
+    background: #88f;
 }
 
 .are {

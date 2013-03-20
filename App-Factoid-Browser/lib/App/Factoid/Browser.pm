@@ -43,9 +43,19 @@ sub get_browse_data {
     debug("get_browse_data: starting at start_num $start_num");
     my @factoids_copy = sort(@combined_factoids);
     my @spliced_factoids;
+    my $flag = 0;
     for (my $i = $start_num; $i <= ($start_num + 25); $i++) {
-        push(@spliced_factoids, q(<span class="line_num">)
-            . sprintf("%6u", $i) . q(</span>) . $factoids_copy[$i]);
+        my $div;
+        if ( $flag ) {
+            $div = q(<div class="line">);
+            $flag = 0;
+        } else {
+            $div = q(<div class="altline">);
+            $flag = 1;
+        }
+        push(@spliced_factoids, $div . q(<span class="line_num">)
+            . sprintf("%6u", $i) . q(</span>) . $factoids_copy[$i]
+            . q(</div>));
     }
     #@spliced_factoids = splice(@factoids_copy, $start_num, 25);
     debug(q(get_browse_data: returning ) . scalar(@spliced_factoids)
