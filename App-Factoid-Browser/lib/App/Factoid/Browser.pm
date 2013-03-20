@@ -6,7 +6,7 @@ use GDBM_File;
 use Fcntl qw(/^O_/);
 use Template;
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 ## setup
     my (%factoids_is, %factoids_are);
@@ -22,8 +22,36 @@ our $VERSION = '0.1';
         O_RDONLY, 0644)
         || confess q(Couldn't open ) .  config->dbm_basename . q(-are.dir with )
             . config->dbm_driver . qq(: $!);
-    # FIXME how to combine the is/are factoids so keys don't step on each
-    # other? pre-make HTML output with correct styles?
+    # pre-make lists of factoids with correct CSS styles
+    my @combined_factoids;
+    foreach my $is ( keys(%factoids_is) ) {
+        push(@combined_factoids, $is . q( <span class="is">is</span> )
+            . $factoids_is{$is});
+    }
+    foreach my $are ( keys(%factoids_are) ) {
+        push(@combined_factoids, $are . q( <span class="are">are</span> )
+            . $factoids_are{$are});
+    }
+    debug(q(Total combined factoids: ) . scalar(@combined_factoids));
+
+### set up a list of factoids for when browsing ###
+sub get_browse_data {
+    my $start_num = shift;
+    if ( ! defined $start_num || $start_num !~ /\d+/ ) {
+        $start_num = 0;
+    }
+    debug("get_browse_data: starting at start_num $start_num");
+    my @factoids_copy = sort(@combined_factoids);
+    my @spliced_factoids;
+    for (my $i = $start_num; $i <= ($start_num + 25); $i++) {
+        push(@spliced_factoids, q(<span class="line_num">)
+            . sprintf("%6u", $i) . q(</span>) . $factoids_copy[$i]);
+    }
+    #@spliced_factoids = splice(@factoids_copy, $start_num, 25);
+    debug(q(get_browse_data: returning ) . scalar(@spliced_factoids)
+        . q( factoids, starting at factoid #) . $start_num);
+    return \@spliced_factoids;
+}
 
 ### original Dancer page ###
 get q(/original) => sub {
@@ -33,38 +61,33 @@ get q(/original) => sub {
 
 ### DEFAULT PAGE ###
 get q(/) => sub {
-    set layout => q(miranda);
     template q(index);
 };
 
 ### /browse ###
 get q(/browse) => sub {
-    set layout => q(miranda);
-    template(q(browse), { factoids => \%factoids_is });
+    my $data_ref = get_browse_data();
+    template(q(browse), {factoids => $data_ref });
 };
 
 ### /browse/:start_num ###
 get q(/browse/:start_num) => sub {
-    set layout => q(miranda);
-    # FIXME create a subset of factoids, based on the :start_num amount
-    template(q(browse), { factoids => \%factoids_is });
+    my $data_ref = get_browse_data( param(q(start_num)) );
+    template(q(browse), {factoids => $data_ref });
 };
 
 ### /random page ###
 get q(/random) => sub {
-    set layout => q(miranda);
     template q(random);
 };
 
 ### /random/urlpage ###
 get q(/randomurl) => sub {
-    set layout => q(miranda);
     template q(randomurl);
 };
 
 ### /search with a :query ###
 get q(/search/:query) => sub {
-    set layout => q(miranda);
     template q(index);
     my $query = param(q(query));
     debug(qq(/search/query; Query string is: $query));

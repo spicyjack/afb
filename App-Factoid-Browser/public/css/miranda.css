@@ -115,18 +115,35 @@ line-height: 1.5em;
 margin: 1.6em 0;
 }
 
-code, tt {
+.line, code, tt {
     font-family: 'Andale Mono', Monaco, 'Liberation Mono', 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', monospace;
 }
 
+.altline {
+    background: #333;
+}
+
+.line_num {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.is {
+    background: #cff;
+}
+
+.are {
+    background: #fcf;
+}
+
 #footer {
-clear: both;
-position: absolute;
-bottom: 2em;
-left: 40%;
-padding-top: 2em;
-text-align: center;
-padding-right: 160px;
-font-family: sans-serif;
-font-size: 10px;
+    clear: both;
+    position: absolute;
+    bottom: 2em;
+    left: 40%;
+    padding-top: 2em;
+    text-align: center;
+    padding-right: 160px;
+    font-family: sans-serif;
+    font-size: 10px;
 }

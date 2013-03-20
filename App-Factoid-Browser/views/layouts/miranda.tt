@@ -12,12 +12,15 @@
     !window.jQuery && document.write('<script type="text/javascript" src="<% request.uri_base %>/js/jquery.js"><\/script>')
 /* ]]> */</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<script src="js/bootstrap.min.js"></script>
+<link href="<% request.uri_base %>/css/bootstrap.min.css" rel="stylesheet"
+  media="screen">
+<script src="<% request.uri_base %>/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container">
-  <% content %>
+  <div class="container">
+    <% content %>
+  </div>
 
   <div id="footer">
     Powered by <a href="http://perldancer.org/">Dancer</a>
