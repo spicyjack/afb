@@ -8,7 +8,7 @@ Should I do, I will do, I just did
     default regex pattern, warn if any factoids don't match the pattern (i.e.
     they won't be able to be found because their corresponding search strings
     will be sanitized by the regex)
-- Get searching of factoids working
+- Searching
   - Create a highlight `<span>` tag that is used to highlight search terms
   - Show the search term, along with a link to toggle highlighting
   - Show the number of search hits found at the bottom of the page
@@ -22,10 +22,12 @@ Should I do, I will do, I just did
   - Word counts for commonly used words
 - Fix the page footer (with Dancer version and link), it's scrolling up when
   it shouldn't
-- Fix the page header, factoids are getting stuck above the header, they
-  should be displaying below the header
 - Change the links at the top of the page so they change the DOM instead of
   loading a different page
+- TinyURL Preview
+  - Follow/decode TinyURL links
+  - For image files, hide the image from the user until the user acknowledges
+    NSFW-ness, or turns off safe mode
 
 ## API List ##
 - `/browse` - Browse factoids
@@ -63,5 +65,9 @@ Should I do, I will do, I just did
 - Get browsing using :start_num working
   - Create a subset of factoids to return to the user
 - Colorize rows on the page so every other row is a different color
+- Fix the page header, factoids are getting stuck above the header, they
+  should be displaying below the header
+- Get searching of factoids working
+
 
 vim: filetype=markdown shiftwidth=2 tabstop=2
