@@ -38,6 +38,7 @@
   <% END %>
   </div>
 
+<!--
   <script type="text/javascript">
     $('#search_btn').click(function() {
       //alert("Changing " + $('#search_form').attr("action") + " to " 
@@ -46,6 +47,7 @@
         "/search/" + $("#search_text").val());
     });
   </script>
+-->
   <!-- ===================== About display ===================== -->
   <div id="about-content" style="display: none;">
   <table>
