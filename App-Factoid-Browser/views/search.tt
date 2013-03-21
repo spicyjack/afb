@@ -19,7 +19,7 @@
 
   <!-- ===================== Search box ===================== -->
   <div class="container">
-    <form action="" id="search_form" class="navbar-form">
+    <form id="search_form" class="navbar-form">
     <% IF ! search_string %>
       <input type="text" class="span4" name="search" id="search_text"
         placeholder="Search factoids">
@@ -38,16 +38,6 @@
   <% END %>
   </div>
 
-<!--
-  <script type="text/javascript">
-    $('#search_btn').click(function() {
-      //alert("Changing " + $('#search_form').attr("action") + " to " 
-      //  +  $("#search_text").val());
-      $('#search_form').attr("action", 
-        "/search/" + $("#search_text").val());
-    });
-  </script>
--->
   <!-- ===================== About display ===================== -->
   <div id="about-content" style="display: none;">
   <table>
