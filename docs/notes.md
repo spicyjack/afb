@@ -8,11 +8,15 @@ Should I do, I will do, I just did
     default regex pattern, warn if any factoids don't match the pattern (i.e.
     they won't be able to be found because their corresponding search strings
     will be sanitized by the regex)
+- Add a route execution timer, show execution time on the page
 - Searching
   - Create a highlight `<span>` tag that is used to highlight search terms
   - Show the search term, along with a link to toggle highlighting
   - Show the number of search hits found at the bottom of the page
   - Show page navigation if there are more search terms than fit on one page
+  - Redirect from the search page to the browse page if no search string is
+    entered into the box when the user presses the *Search* button
+  - *OR*, warn the user that they didn't enter a search string
 - Factoid stats
   - Put them on their own page
   - Total number of factoids
