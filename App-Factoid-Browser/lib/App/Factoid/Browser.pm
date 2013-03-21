@@ -6,7 +6,7 @@ use GDBM_File;
 use Fcntl qw(/^O_/);
 use Template;
 
-our $VERSION = '0.2';
+our $VERSION = '0.3';
 
 ## setup
     my (%factoids_is, %factoids_are);
@@ -40,6 +40,7 @@ sub get_browse_data {
     die(q|Missing Factoid array (factoids)|)
         unless(defined $args{factoids});
     my $start_num = $args{start_num};
+    my $lines = $args{lines};
     my @factoids = sort(@{$args{factoids}});
     # if start_num was not passed in, or if it's not a number
     if ( ! defined $start_num || $start_num !~ /\d+/ ) {
@@ -49,13 +50,20 @@ sub get_browse_data {
     if ( $start_num > scalar(@factoids) ) {
         $start_num = 0;
     }
+    if ( ! defined $lines || $lines !~ /\d+/ ) {
+        $lines = 24;
+    }
+    # if start_num is larger than the number of factoids, reset to 0
+    if ( $lines > scalar(@factoids) ) {
+        $lines = scalar(@factoids);
+    }
     debug(" get_browse_data: starting at $start_num");
     my @spliced_factoids;
     my $flag = 0;
     my $end_num;
     # check to see if we have enough factoids for a screenful
-    if ( $start_num + 24 < scalar(@factoids) ) {
-        $end_num = $start_num + 24; 
+    if ( $start_num + $lines < scalar(@factoids) ) {
+        $end_num = $start_num + $lines;
     } else {
         $end_num = scalar(@factoids) - 1;
     }
@@ -70,7 +78,7 @@ sub get_browse_data {
             $flag = 1;
         }
         push(@spliced_factoids, $div . q(<span class="line_num">)
-            . sprintf("%6u", $i) . q(</span>) . $factoids[$i]
+            . sprintf("%6u", $i + 1) . q(</span>) . $factoids[$i]
             . q(</div>));
     }
     #@spliced_factoids = splice(@factoids_copy, $start_num, 25);
@@ -101,8 +109,17 @@ get q(/browse) => sub {
 ### /browse/:start_num ###
 get q(/browse/:start_num) => sub {
     my $data_ref = get_browse_data( 
-        start_num => param(q(start_num)),
-        factoids => \@combined_factoids,
+        start_num   => param(q(start_num)),
+        factoids    => \@combined_factoids,
+    );
+    template(q(browse), {factoids => $data_ref });
+};
+### /browse/:start_num ###
+get q(/browse/:start_num/:lines) => sub {
+    my $data_ref = get_browse_data(
+        start_num   => param(q(start_num)),
+        lines       => param(q(lines)),
+        factoids    => \@combined_factoids,
     );
     template(q(browse), {factoids => $data_ref });
 };
@@ -119,7 +136,6 @@ get q(/randomurl) => sub {
 
 ### /search with a :query ###
 get q(/search/:query) => sub {
-    template q(search);
     my $query = param(q(query));
     debug(qq(/search/query; Query string is: $query));
     my @found_factoids = grep(/$query/, @combined_factoids);
@@ -127,12 +143,14 @@ get q(/search/:query) => sub {
     my $data_ref = get_browse_data( 
         factoids => \@found_factoids,
     );
-    template(q(browse), {factoids => $data_ref });
+    template(q(search), {
+        factoids        => $data_ref,
+        search_string   => \$query,
+    });
 };
 
 ### /search with a :query ###
 get q(/search/:query/:start_num) => sub {
-    template q(search);
     my $query = param(q(query));
     debug(qq(/search/query; Query string is: $query));
     my @found_factoids = grep(/$query/, @combined_factoids);
@@ -141,7 +159,10 @@ get q(/search/:query/:start_num) => sub {
         start_num   => param(q(start_num)),
         factoids    => \@found_factoids,
     );
-    template(q(browse), {factoids => $data_ref });
+    template(q(search), {
+        factoids        => $data_ref,
+        search_string   => \$query,
+    });
 };
 =pod
 
