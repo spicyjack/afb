@@ -3,6 +3,8 @@
 Should I do, I will do, I just did
 
 ## Todo ##
+- Show an alert popup box when any of the functions that are not currently
+  implemented are clicked on
 - Sanitize input
   - Add a function to `factoid_tool.pl` that checks the content against a
     default regex pattern, warn if any factoids don't match the pattern (i.e.
