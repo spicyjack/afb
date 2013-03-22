@@ -96,19 +96,24 @@ get q(/original) => sub {
 ### DEFAULT PAGE ###
 get q(/) => sub {
     # not picking up :query here, hack around it
-    debug(q(plain /search: request_uri is ) . request->request_uri);
+    debug(q( plain /search: request_uri is ) . request->request_uri);
     my $query = request->request_uri;
-    $query =~ s#\/\?search=##;
-    debug(qq(plain /search; Query string is: $query));
-    my @found_factoids = grep(/$query/, @combined_factoids);
-    debug(qq(plain /search; Found ) . scalar(@found_factoids) . qq( factoids));
-    my $data_ref = get_browse_data(
-        factoids => \@found_factoids,
-    );
-    template(q(search), {
-        factoids        => $data_ref,
-        search_string   => \$query,
-    });
+    if ( $query =~ s#\/\?search=## ) {
+        debug(qq( plain /search; Query string is: $query));
+        my @found_factoids = grep(/$query/, @combined_factoids);
+        debug(qq( plain /search; Found ) . scalar(@found_factoids)
+            . qq( factoids));
+        my $data_ref = get_browse_data(
+            factoids => \@found_factoids,
+        );
+        template(q(search), {
+            factoids        => $data_ref,
+            search_string   => \$query,
+        });
+    } elsif ( $query =~ /\// ) {
+        debug(qq( plain /search; root '/' requested));
+        template(q(search));
+    }
 };
 
 ### /browse ###
