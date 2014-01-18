@@ -2,6 +2,10 @@
 # env-related settings should go to environments/$env.yml
 # all the settings in this file will be loaded at Dancer's startup.
 
+# port/host settings
+server: "127.0.0.1"
+port: 3000
+
 # Your application's name
 appname: "App::Factoid::Browser"
 
@@ -12,6 +16,9 @@ behind_proxy: "true"
 strict_config: "true"
 
 # What environment are we running under?
+# Note: the default environment is "development"
+# Note #2: you can also use the --environment switch on the command line to
+# set the environment when starting Dancer
 #environment: "production"
 #environment: "development"
 
