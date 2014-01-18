@@ -2,6 +2,15 @@
 
 Should I do, I will do, I just did
 
+## Starting the app ##
+Change to the `App-Factoid-Browser` directory and issue this command:
+
+    perl bin/app.pl
+
+You can also specify an environment with:
+
+    perl bin/app.pl --environment production
+
 ## Todo ##
 - Show an alert popup box when any of the functions that are not currently
   implemented are clicked on

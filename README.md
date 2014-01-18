@@ -15,6 +15,15 @@ Browse and search for Infobot factoids from the comfort of your web browser.
   - `scripts/get_factoids.sh`
   - Downloads factoids from remote server, creates tarball for re-downloading
 
+## Starting the app ##
+Change to the `App-Factoid-Browser` directory and issue this command:
+
+    perl bin/app.pl
+
+You can also specify an environment with:
+
+    perl bin/app.pl --environment production
+
 ## Licensing ##
 This software is released under the terms of the *Perl Artistic License*, a
 copy of which can be viewed at http://dev.perl.org/licenses/artistic.html.
