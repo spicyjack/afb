@@ -24,6 +24,14 @@ You can also specify an environment with:
 
     perl bin/app.pl --environment production
 
+## Changing the layout (view) ##
+Edit the file `config.yml`, and set `layout:` to be the name of a file in the
+`views/layouts` directorythat contains _Template Toolkit_ markup.  This file
+will be used as the default page(s) for the app.  The `<% content %>` block in
+that page will contain the content for whatever page was requested by the
+user.  _Template Toolkit_ will also read in this page when that tag is
+reached, and parse and output the contents of the page.
+
 ## Licensing ##
 This software is released under the terms of the *Perl Artistic License*, a
 copy of which can be viewed at http://dev.perl.org/licenses/artistic.html.
